@@ -8,16 +8,29 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var dataManager = DataManager()
+    @State private var showSettings = false
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationView {
+            ProblemListView()
+                .environmentObject(dataManager)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: {
+                            showSettings = true
+                        }) {
+                            UserAvatarView(size: 40)
+                        }
+                    }
+                }
+            }
+            .sheet(isPresented: $showSettings) {
+                SettingsView()
+            }
         }
-        .padding()
     }
-}
+
 
 #Preview {
     ContentView()
